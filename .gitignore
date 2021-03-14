@@ -13,3 +13,4 @@ buildNumber.properties
 .project
 .settings
 ..*
+local_db*
