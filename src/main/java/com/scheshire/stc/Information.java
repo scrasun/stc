@@ -25,9 +25,11 @@ public class Information {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
     
+    // name - not encrypted
     @Column(name="name")
     private String name;
     
+    // secrets field is encrypted
     @Convert(converter = EncryptionConverter.class)
     @Column(name="secrets")
     private String secrets;
