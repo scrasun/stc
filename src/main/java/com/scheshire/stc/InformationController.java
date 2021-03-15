@@ -2,7 +2,9 @@ package com.scheshire.stc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,19 +13,37 @@ public class InformationController {
 	@Autowired
 	private InformationRepo infoRepo;
 	
-	@GetMapping("/information")
-	public String getInformation(@RequestParam Long id)
+	@GetMapping("/information/{id:.+}")
+	public InformationDTO getInformation(@PathVariable Long id)
 	{
-		return infoRepo.getOne(id).getName();
+		InformationDTO response = new InformationDTO();
+		
+		if (!infoRepo.existsById(id))
+		{
+			System.out.println("nya");
+			return response;
+		}
+			
+		Information info = infoRepo.getOne(id);
+		
+		response.setName(info.getName());
+		response.setSecrets(info.getSecrets());
+		
+		return response;
 	}
 	
 	@PostMapping("/information")
-	public String postInformation(@RequestParam String name, @RequestParam String secrets)
+	public IdDTO postInformation(@RequestBody InformationDTO input)
 	{
 		Information info = new Information();
-		info.setName(name);
-		info.setSecrets(secrets);
-		return infoRepo.save(info).getId().toString();
+		info.setName(input.getName());
+		info.setSecrets(input.getSecrets());
+		
+		IdDTO response = new IdDTO();
+		
+		response.setId(infoRepo.save(info).getId());
+		
+		return response;
 	}
 
 }

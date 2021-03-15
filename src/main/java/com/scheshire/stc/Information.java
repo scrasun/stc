@@ -1,8 +1,7 @@
 package com.scheshire.stc;
 
-import java.util.Set;
-
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +28,7 @@ public class Information {
     @Column(name="name")
     private String name;
     
+    @Convert(converter = EncryptionConverter.class)
     @Column(name="secrets")
     private String secrets;
 
